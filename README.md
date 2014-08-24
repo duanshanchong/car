@@ -1,7 +1,7 @@
 racegame
 ========
 
-a race game
+*a race game*
 
 演示地址
 
