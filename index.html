@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, 
+    user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<style type="text/css">
+body { margin: 0; padding: 0; background: #000;}
+canvas { display: block; margin: 0 auto; background: #fff; }
+
+#sence{border:1px solid #ccc;position:relative;}
+#block{width:50px;height:50px;background:#f00;position:fixed;left:0;top:0;}
+</style>
+</head>
+
+<body>
+
+<canvas id="sence" width="640" height="960"></canvas>
+
+<script>
+    var Screen = {
+        // set up some inital values
+        WIDTH: 320,
+        HEIGHT:  480,
+        scale:  1,
+        offset: {top: 0, left: 0},
+
+        RATIO:  null,
+        currentWidth:  null,
+        currentHeight:  null,
+        canvas: null,
+        ua:  null,
+        android: null,
+        ios:  null,
+
+        init: function() {
+            // the proportion of width to height
+            Screen.RATIO = Screen.WIDTH / Screen.HEIGHT;
+            // these will change when the screen is resize
+            Screen.currentWidth = Screen.WIDTH;
+            Screen.currentHeight = Screen.HEIGHT;
+            // this is our canvas element
+            Screen.canvas = document.getElementsByTagName('canvas')[0];
+            Screen.canvas.width = Screen.WIDTH;
+            Screen.canvas.height = Screen.HEIGHT;
+            Screen.ua = navigator.userAgent.toLowerCase();
+            Screen.android = Screen.ua.indexOf('android') > -1 ? true : false;
+            Screen.ios = ( Screen.ua.indexOf('iphone') > -1 || Screen.ua.indexOf('ipad') > -1  ) ? true : false;
+
+//            // listen for clicks
+//            window.addEventListener('click', function(e) {
+//                e.preventDefault();
+//                Screen.Input.set(e);
+//            }, false);
+//
+//            // listen for touches
+//            window.addEventListener('touchstart', function(e) {
+//                e.preventDefault();
+//                // the event object has an array
+//                // called touches, we just want
+//                // the first touch
+//                Screen.Input.set(e.touches[0]);
+//            }, false);
+//            window.addEventListener('touchmove', function(e) {
+//                // we're not interested in this
+//                // but prevent default behaviour
+//                // so the screen doesn't scroll
+//                // or zoom
+//                e.preventDefault();
+//            }, false);
+//            window.addEventListener('touchend', function(e) {
+//                // as above
+//                e.preventDefault();
+//            }, false);
+
+            // we're ready to resize
+//            Screen.resize();
+        },
+
+        resize: function() {
+
+            Screen.currentHeight = window.innerHeight;
+            // resize the width in proportion
+            // to the new height
+            Screen.currentWidth = Screen.currentHeight * Screen.RATIO;
+
+            // this will create some extra space on the
+            // page, allowing us to scroll pass
+            // the address bar, and thus hide it.
+            if (Screen.android || Screen.ios) {
+                document.body.style.height = (window.innerHeight + 50) + 'px';
+            }
+
+            // set the new canvas style width & height
+            // note: our canvas is still 320x480 but
+            // we're essentially scaling it with CSS
+            Screen.canvas.style.width = Screen.currentWidth + 'px';
+            Screen.canvas.style.height = Screen.currentHeight + 'px';
+
+            // the amount by which the css resized canvas
+            // is different to the actual (480x320) size.
+            Screen.scale = Screen.currentWidth / Screen.WIDTH;
+            // position of canvas in relation to
+            // the screen
+            Screen.offset.top = Screen.canvas.offsetTop;
+            Screen.offset.left = Screen.canvas.offsetLeft;
+
+            // we use a timeout here as some mobile
+            // browsers won't scroll if there is not
+            // a small delay
+            window.setTimeout(function() {
+                window.scrollTo(0,1);
+            }, 1);
+        }
+    }
+
+    Screen.init();
+</script>
+
+<script src="lib/util.js"></script>
+<script src="lib/entities.js"></script>
+<script src="user-entities.js"></script>
+<script src="lib/patch-enhancement.js"></script>
+<script src="lib/main_app.js"></script>
+<script src="lib/index.js"></script>
+
+</body>
+</html>
